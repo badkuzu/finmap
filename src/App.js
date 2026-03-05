@@ -11,7 +11,7 @@ const smallIcon = new L.Icon({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
   iconSize: [12, 20],       // half of default 25x41
   iconAnchor: [6, 20],      // bottom of icon is the marker point
-  popupAnchor: [0, -20],    
+  popupAnchor: [0, -20],
   shadowSize: [20, 20],
 });
 
@@ -134,13 +134,15 @@ function App() {
           bottom: 20,
           left: "50%",
           transform: "translateX(-50%)",
-          backgroundColor: "white",
-          padding: "6px 12px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          backgroundColor: "rgba(255, 255, 255, 0.9)", // slightly transparent
+          padding: "12px 18px",                        // larger for touch
+          borderRadius: "10px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
           cursor: "pointer",
           userSelect: "none",
-          zIndex: 1000,
+          fontSize: "14px",                             // readable on small screens
+          fontWeight: "bold",
+          zIndex: 10000,                                // ensure on top
         }}
         onClick={() => setShowTooltips(prev => !prev)}
       >
