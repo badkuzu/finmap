@@ -100,8 +100,7 @@ function App() {
         style={{
           position: "fixed",
           bottom: 20,
-          left: "50%",
-          transform: "translateX(-50%)",
+          right: 20,
           backgroundColor: "rgba(255,255,255,0.9)",
           padding: "12px 18px",
           borderRadius: "10px",
@@ -115,7 +114,7 @@ function App() {
         }}
         onClick={() => setShowTooltips(prev => !prev)}
       >
-        {showTooltips ? "Hide Tooltips" : "Show Tooltips"}
+        {showTooltips ? "A skitrej mu" : "A dej mu"}
       </div>
     </div>
   );
