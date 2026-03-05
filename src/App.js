@@ -130,19 +130,20 @@ function App() {
       {/* Tooltip toggle switch */}
       <div
         style={{
-          position: "absolute",
+          position: "fixed",           // fixed to viewport
           bottom: 20,
           left: "50%",
           transform: "translateX(-50%)",
-          backgroundColor: "rgba(255, 255, 255, 0.9)", // slightly transparent
-          padding: "12px 18px",                        // larger for touch
+          backgroundColor: "rgba(255,255,255,0.9)",
+          padding: "12px 18px",
           borderRadius: "10px",
           boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
           cursor: "pointer",
           userSelect: "none",
-          fontSize: "14px",                             // readable on small screens
+          fontSize: "14px",
           fontWeight: "bold",
-          zIndex: 10000,                                // ensure on top
+          zIndex: 10000,
+          touchAction: "auto",         // ensure taps are handled
         }}
         onClick={() => setShowTooltips(prev => !prev)}
       >
