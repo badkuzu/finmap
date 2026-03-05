@@ -4,23 +4,53 @@ import L from "leaflet";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
 
-// Half-size marker icon (optional: use circus tent if you like)
+// Create a smaller marker icon (half size)
 const smallIcon = new L.Icon({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [12, 20],       
-  iconAnchor: [6, 20],      
-  popupAnchor: [0, -20],    
+  iconSize: [12, 20],       // half of default 25x41
+  iconAnchor: [6, 20],      // bottom of icon is the marker point
+  popupAnchor: [0, -20],
   shadowSize: [20, 20],
 });
+
+// Weather code to readable description
+const weatherCodeMap = {
+  0: "Clear",
+  1: "Mainly Clear",
+  2: "Partly Cloudy",
+  3: "Overcast",
+  45: "Fog",
+  48: "Depositing Fog",
+  51: "Drizzle",
+  53: "Drizzle",
+  55: "Drizzle",
+  56: "Freezing Drizzle",
+  57: "Freezing Drizzle",
+  61: "Rain",
+  63: "Rain",
+  65: "Rain",
+  66: "Freezing Rain",
+  67: "Freezing Rain",
+  71: "Snow",
+  73: "Snow",
+  75: "Snow",
+  77: "Snow Grains",
+  80: "Rain Showers",
+  81: "Rain Showers",
+  82: "Rain Showers",
+  85: "Snow Showers",
+  86: "Snow Showers",
+  95: "Thunderstorm",
+  96: "Thunderstorm with Hail",
+  99: "Thunderstorm with Hail",
+};
 
 function App() {
   const [cities, setCities] = useState([]);
   const [weatherData, setWeatherData] = useState({});
   const [showTooltips, setShowTooltips] = useState(true);
-
-  const WEATHERAPI_KEY = process.env.REACT_APP_WEATHERAPI_KEY;
 
   // Load CSV
   useEffect(() => {
@@ -40,23 +70,25 @@ function App() {
       });
   }, []);
 
-  // Fetch weather for each city from WeatherAPI.com
+  // Fetch weather from Open-Meteo
   useEffect(() => {
     if (cities.length === 0) return;
 
     cities.forEach(async (city) => {
       try {
-        const res = await fetch(
-          `https://api.weatherapi.com/v1/current.json?key=${WEATHERAPI_KEY}&q=${city.lat},${city.lon}`
-        );
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true`;
+        const res = await fetch(url);
         const data = await res.json();
-        setWeatherData(prev => ({
-          ...prev,
-          [city.city]: {
-            temp: data.current.temp_c,
-            desc: data.current.condition.text
-          }
-        }));
+
+        if (data.current_weather) {
+          setWeatherData(prev => ({
+            ...prev,
+            [city.city]: {
+              temp: data.current_weather.temperature,
+              desc: weatherCodeMap[data.current_weather.weathercode] || "Unknown",
+            }
+          }));
+        }
       } catch (err) {
         console.error("Weather fetch error for", city.city, err);
         setWeatherData(prev => ({
@@ -65,7 +97,7 @@ function App() {
         }));
       }
     });
-  }, [cities, WEATHERAPI_KEY]);
+  }, [cities]);
 
   const polylineCoords = cities.map(c => [c.lat, c.lon]);
 
@@ -98,10 +130,11 @@ function App() {
       {/* Tooltip toggle switch */}
       <div
         style={{
-          position: "fixed",
+          position: "fixed",           // fixed to viewport
           bottom: 20,
-          left: "50%",
-          transform: "translateX(-50%)",
+          right: 20,
+          // left: "50%",
+          // transform: "translateX(-50%)",
           backgroundColor: "rgba(255,255,255,0.9)",
           padding: "12px 18px",
           borderRadius: "10px",
@@ -111,11 +144,11 @@ function App() {
           fontSize: "14px",
           fontWeight: "bold",
           zIndex: 10000,
-          touchAction: "auto",
+          touchAction: "auto",         // ensure taps are handled
         }}
         onClick={() => setShowTooltips(prev => !prev)}
       >
-        {showTooltips ? "Hide Tooltips" : "Show Tooltips"}
+        {showTooltips ? "Skitrej mu" : "Dej mu"}
       </div>
     </div>
   );
