@@ -148,7 +148,7 @@ function App() {
         }}
         onClick={() => setShowTooltips(prev => !prev)}
       >
-        {showTooltips ? "Skitraj mu" : "Dej mu"}
+        {showTooltips ? "Skitrej mu" : "Dej mu"}
       </div>
     </div>
   );
