@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Circus Mapper",
+  "name": "Create Circus Mapper Sample",
   "icons": [
     {
       "src": "tent.ico",
